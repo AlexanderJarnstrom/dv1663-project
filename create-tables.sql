@@ -3,7 +3,7 @@ create table Personell(
   FName varchar(15) not null,
   LName varchar(15) not null,
   PhoneNbr int not null,
-  Email varchar(20) default null,
+  Email varchar(30) default null,
   primary key (PID)
 );
 
