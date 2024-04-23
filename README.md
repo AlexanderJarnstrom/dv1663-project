@@ -4,7 +4,7 @@ final project in DV1663 at BTH
 ## Tables
 Current tables in project.
 ### Personell
-Holds information about the staff at the library. The following columns reprecent a worker:
+Holds information about the staff at the library. The following attributes reprecent a worker:
   - **PID** (Personell ID, *Primary key*)
   - **FName** (First name)
   - **LName** (Last name)
@@ -12,7 +12,7 @@ Holds information about the staff at the library. The following columns reprecen
   - **Email**
 
 ### Customers
-Holds information about the customers in the system. A customer is reprecented by the following columns:
+Holds information about the customers in the system. A customer is reprecented by the following attributes:
   - **CID** (Customer ID, *Primary key*)
   - **FName** (First name)
   - **LName** (Last name)
@@ -20,13 +20,13 @@ Holds information about the customers in the system. A customer is reprecented b
   - **Email**
 
 ### Books
-Holds information about the books in the system. A book is reprecented by the following columns:
+Holds information about the books in the system. A book is reprecented by the following attributes:
   - **ISBN** (International Standard Book Number, *Primary key*)
   - **Title**
   - **Quantity**
 
 ### Borrows
-Shows who borrowed which book from who, A borrow is reprecented by the following columns:
+Shows who borrowed which book from who, A borrow is reprecented by the following attributes:
   - **BID** (Borrow ID, *Primary key*)
   - **ISBN** (International Standard Book Number, *Foreign key*)
   - **CID** (Customer ID, *Foreign key*)
