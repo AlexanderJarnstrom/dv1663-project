@@ -31,5 +31,8 @@ create table Borrows (
   PID varchar(7) not null,
   StartDate date default(current_date()),
   EndDate date default(current_date() + 3),
-  primary key (BID)
+  primary key (BID),
+  foreign key (ISBN) references Books(ISBN),
+  foreign key (CID) references Customers(CID),
+  foreign key (PID) references Personell(PID)
 );
