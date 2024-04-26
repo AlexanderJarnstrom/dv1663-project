@@ -51,7 +51,7 @@ Holds information about failed borrow atempts, currently a failed attempt is whe
   - SID
 #### Info
 Adds a book to *Borrows* if their isn't any more books in stock it'll add an attempt to *BorrowAttempts*.
-### Usage
+#### Usage
 ```
 call BorrowBook(<ISBN>, <CID>, <SID>);
 ```
