@@ -43,6 +43,17 @@ Holds information about failed borrow atempts, currently a failed attempt is whe
   - **Quantity** (The book count at that day)
   - **AlreadyBorrowed** (The amount of currently borrowed books)
 
+## Help SQL
+
+### add-sample-data
+Adds sample data into *Customers*, *Staff* and *Books*. If updating of the tables uccours, validate the sample data.
+
+### create-tables
+Creates all the relevant tables with the atributes.
+
+### create-procedure-borrowBook
+Creates the procedure *BorrowBook*.
+
 ## Procedures
 ### BorrowBook
 #### Parameters
@@ -55,7 +66,3 @@ Adds a book to *Borrows* if their isn't any more books in stock it'll add an att
 ```
 call BorrowBook(<ISBN>, <CID>, <SID>);
 ```
-
-## Help SQL
-### add-sample-data
-Adds sample data into *Customers*, *Staff* and *Books*. If updating of the tables uccours, validate the sample data.
