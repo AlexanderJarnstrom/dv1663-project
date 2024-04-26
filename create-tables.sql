@@ -3,7 +3,7 @@ create table Personell(
   FName varchar(15) not null,
   LName varchar(15) not null,
   PhoneNbr int not null,
-  Email varchar(30) default null,
+  Email varchar(40) default null,
   primary key (PID)
 );
 
@@ -12,7 +12,7 @@ create table Customers(
   FName varchar(15) not null,
   LName varchar(15) not null,
   PhoneNbr int default null,
-  Email varchar(30) default null,
+  Email varchar(40) default null,
   primary key (CID),
   constraint ValidateCustomer check (Email is not null or PhoneNBR is not null)
 );
@@ -35,4 +35,13 @@ create table Borrows (
   foreign key (ISBN) references Books(ISBN),
   foreign key (CID) references Customers(CID),
   foreign key (PID) references Personell(PID)
+);
+
+create table BorrowAtempts (
+  ID int not null unique auto_increment,
+  ISBN int,
+  TryDate Date,
+  Quantity int,
+  AlreadyBorrowed int,
+  primary key (ID)
 );
