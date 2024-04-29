@@ -44,7 +44,7 @@ create table Borrows (
   foreign key (SID) references Staff(SID)
 );
 
-create table BorrowAtempts (
+create table BorrowAttempts (
   ID int not null unique auto_increment,
   ISBN int,
   TryDate Date,
