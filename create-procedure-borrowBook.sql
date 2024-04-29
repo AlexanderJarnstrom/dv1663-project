@@ -1,5 +1,3 @@
-drop procedure BorrowBook;
-
 delimiter $$
 
 create procedure BorrowBook(
@@ -22,7 +20,7 @@ begin
   where Borrows.ISBN = in_isbn;
   
   if AlreadyBorrowed >= Total then
-    insert into BorrowAtempts (ISBN, TryDate, Quantity, AlreadyBorrowed)
+    insert into BorrowAttempts (ISBN, TryDate, Quantity, AlreadyBorrowed)
     value (in_isbn, curdate(), total, alreadyBorrowed);    
   end if;
   if AlreadyBorrowed < Total then
