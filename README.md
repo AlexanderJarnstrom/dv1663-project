@@ -43,26 +43,54 @@ Holds information about failed borrow atempts, currently a failed attempt is whe
   - **Quantity** (The book count at that day)
   - **AlreadyBorrowed** (The amount of currently borrowed books)
 
-## Help SQL
+## Views
+### CurrentlyBorrowed
+Shows how many of the individual books are currently borrowed and when the earliest return date is set.
+  - **ISBN** (Which book)
+  - **Title**
+  - **CurrentlyBorrowed** (How many which are currently borrowed)
+  - **EarliestReturn** (Shows the date of the closest return)
 
+## Help SQL
 ### add-sample-data
 Adds sample data into *Customers*, *Staff* and *Books*. If updating of the tables uccours, validate the sample data.
 
-### create-tables
-Creates all the relevant tables with the atributes.
-
-### create-procedure-borrowBook
-Creates the procedure *BorrowBook*.
+### create
+  - create-tables: creates the needed tables
+#### create-procedure
+  - create-procedure-borrowBook: creates procedure **BorrowBook**
+  - create-procedure-setDate: creates procedure **SetDate**
+  - create-procedure-updateDate: creates procedure **UpdateDate**
+#### create-view
+  - create-view-currentlyBorrowed: creates view *CurrentlyBorrowed*
 
 ## Procedures
 ### BorrowBook
-#### Parameters
-  - ISBN
-  - CID
-  - SID
 #### Info
-Adds a book to *Borrows* if their isn't any more books in stock it'll add an attempt to *BorrowAttempts*.
+Adds a book to *Borrows* if their isn't any more books in stock it'll add an attempt to *BorrowAttempts*. Sets the current date as **StartDate** and current date with an additional three months as **EndDate**.
 #### Usage
 ```
 call BorrowBook(<ISBN>, <CID>, <SID>);
 ```
+  - **ISBN**, International Standard Book Number
+  - **CID**, Customer ID
+  - **SID**, Staff ID
+### SetDate
+#### Info
+Sets the end date to the given date in *Borrows*.
+#### Usage
+```
+call SetDate(<BID>, <date>)
+```
+  - **BID**, Borrow ID
+  - **date**, the wished date ('YYYY-MM-DD')
+### UpdateDate
+#### Info
+Adds or subtracts the given amount from the current end date in *Borrows*.
+#### Usage
+```
+call UpdateDate(<BID>, <Months>, <add>)
+```
+  - **BID**, Borrow ID
+  - **Months**, Amount of months (int)
+  - **add**, adds if true, subs if false (bool)
