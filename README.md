@@ -94,7 +94,7 @@ call SetDate(<BID>, <date>)
   - **date**, the wished date ('YYYY-MM-DD')
 ### UpdateDate
 #### Info
-Adds or subtracts the given amount from the current end date in *Borrows*.
+Adds the given amount from the current end date in *Borrows*, works with negative numbers if the time is wished to be shortend.
 Throws an error if:
   - The given months moves **EndDate** before the current date.
   - The given **BID** doesn't exist.
