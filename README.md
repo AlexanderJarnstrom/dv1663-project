@@ -100,6 +100,7 @@ Adds or subtracts the given amount from the current end date in *Borrows*.
 Throws an error if:
     - The given months moves **EndDate** before the current date.
     - The given **BID** doesn't exist.
+
 #### Usage
 ```
 call UpdateDate(<BID>, <Months>)
