@@ -51,6 +51,9 @@ Shows how many of the individual books are currently borrowed and when the earli
   - **CurrentlyBorrowed** (How many which are currently borrowed)
   - **EarliestReturn** (Shows the date of the closest return)
 
+### LateReturns
+Shows all the *Borrows* where the **EndDate** has pasted. Same attributes as *Borrows*.
+
 ## Help SQL
 ### add-sample-data
 Adds sample data into *Customers*, *Staff* and *Books*. If updating of the tables uccours, validate the sample data.
@@ -63,6 +66,7 @@ Adds sample data into *Customers*, *Staff* and *Books*. If updating of the table
   - create-procedure-updateDate: creates procedure **UpdateDate**
 #### create-view
   - create-view-currentlyBorrowed: creates view *CurrentlyBorrowed*
+  - create-view-lateReturns: creates view *LateReturns*
 
 ## Procedures
 ### BorrowBook
@@ -78,6 +82,11 @@ call BorrowBook(<ISBN>, <CID>, <SID>);
 ### SetDate
 #### Info
 Sets the end date to the given date in *Borrows*.
+#### Errors
+Throws an error if:
+    - The given date is before the current date.
+    - The given **BID** doesn't exist.
+
 #### Usage
 ```
 call SetDate(<BID>, <date>)
@@ -87,10 +96,13 @@ call SetDate(<BID>, <date>)
 ### UpdateDate
 #### Info
 Adds or subtracts the given amount from the current end date in *Borrows*.
+#### Errors
+Throws an error if:
+    - The given months moves **EndDate** before the current date.
+    - The given **BID** doesn't exist.
 #### Usage
 ```
-call UpdateDate(<BID>, <Months>, <add>)
+call UpdateDate(<BID>, <Months>)
 ```
   - **BID**, Borrow ID
   - **Months**, Amount of months (int)
-  - **add**, adds if true, subs if false (bool)
