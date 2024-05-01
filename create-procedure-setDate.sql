@@ -1,13 +1,15 @@
-delimiter $$
-create procedure SetDate(
-  in in_bid int,
-  in in_newDate date
-) begin
-  if curdate() < in_newDate then
-    update Borrows 
-    set Borrows.EndDate = in_newDate
-    where Borrows.BID = in_bid;
-  end if;
-end $$
+DELIMITER $$
 
-delimiter ;
+CREATE PROCEDURE SetDate(
+  IN in_bid INT,
+  IN in_newDate DATE
+)
+BEGIN
+  IF curdate() < in_newDate THEN
+    UPDATE Borrows 
+    SET Borrows.EndDate = in_newDate
+    WHERE Borrows.BID = in_bid;
+  END IF;
+END $$
+
+DELIMITER ;

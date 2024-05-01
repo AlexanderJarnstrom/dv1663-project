@@ -1,33 +1,31 @@
-delimiter $$
+DELIMITER $$
 
-create procedure BorrowBook(
-  in in_isbn int,
-  in in_cid varchar(8),
-  in in_sid varchar(7)
+CREATE PROCEDURE BorrowBook(
+  IN in_isbn INT,
+  IN in_cid VARCHAR(8),
+  IN in_sid VARCHAR(7)
 )
-begin
-  declare AlreadyBorrowed int;
-  declare Total int;
+BEGIN
+  DECLARE already_borrowed INT;
+  DECLARE total INT;
   
-  select Books.Quantity
-  into total
-  from Books
-  where Books.ISBN = in_isbn;
+  SELECT Books.Quantity
+  INTO total
+  FROM Books
+  WHERE Books.ISBN = in_isbn;
   
-  select count(Borrows.ISBN)
-  into alreadyBorrowed
-  from Borrows
-  where Borrows.ISBN = in_isbn;
+  SELECT count(Borrows.ISBN)
+  INTO already_borrowed
+  FROM Borrows
+  WHERE Borrows.ISBN = in_isbn;
   
-  if AlreadyBorrowed >= Total then
-    insert into BorrowAttempts (ISBN, TryDate, Quantity, AlreadyBorrowed)
-    value (in_isbn, curdate(), total, alreadyBorrowed);    
-  end if;
-  if AlreadyBorrowed < Total then
+  IF already_borrowed >= total THEN
+    INSERT INTO BorrowAttempts (ISBN, TryDate, Quantity, AlreadyBorrowed)
+    VALUE (in_isbn, curdate(), total, already_borrowed);    
+  ELSE
     insert into Borrows (ISBN, CID, SID, StartDate, EndDate)
-    value (in_isbn, in_cid, in_sid, curdate(), date_add(curdate(), interval 3 month));
-  end if;
-  
-end $$
+    value (in_isbn, in_cid, in_sid, curdate(), date_add(curdate(), interval 3 MONTH));
+  END IF;
+END $$
 
-delimiter ;
+DELIMITER ;

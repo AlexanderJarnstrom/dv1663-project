@@ -1,54 +1,54 @@
-drop table Borrows;
-drop table Staff;
-drop table BorrowAtempts;
-drop table Customers;
-drop table Books;
+DROP TABLES Borrows;
+DROP  TABLES Staff;
+DROP TABLES BorrowAtempts;
+DROP TABLES Customers;
+DROP TABLES Books;
 
-create table Staff(
-  SID varchar(7) not null unique,
-  FName varchar(15) not null,
-  LName varchar(15) not null,
-  PhoneNbr int not null,
-  Email varchar(40) default null,
-  primary key (SID)
+CREATE TABLE Staff(
+  SID VARCHAR(7) NOT NULL UNIQUE,
+  FName VARCHAR(15) NOT NULL,
+  LName VARCHAR(15) NOT NULL,
+  PhoneNbr INT NOT NULL,
+  Email VARCHAR(40) DEFAULT NULL,
+  PRIMARY KEY (SID)
 );
 
-create table Customers(
-  CID varchar(8) not null unique,
-  FName varchar(15) not null,
-  LName varchar(15) not null,
-  PhoneNbr int default null,
-  Email varchar(40) default null,
-  primary key (CID),
-  constraint ValidateCustomer check (Email is not null or PhoneNBR is not null)
+CREATE TABLE Customers(
+  CID VARCHAR(8) NOT NULL UNIQUE,
+  FName VARCHAR(15) NOT NULL,
+  LName VARCHAR(15) NOT NULL,
+  PhoneNbr INT DEFAULT NULL,
+  Email VARCHAR(40) DEFAULT NULL,
+  PRIMARY KEY (CID),
+  CONSTRAINT ValidateCustomer CHECK (Email IS NOT NULL OR PhoneNBR IS NOT NULL)
 );
 
-create table Books (
-  ISBN int not null unique,
-  Title varchar(25) not null,
-  Price int not null,
-  Quantity int default(0),
-  primary key (ISBN)
+CREATE TABLE Books (
+  ISBN INT NOT NULL UNIQUE,
+  Title VARCHAR(25) NOT NULL,
+  Price INT NOT NULL,
+  Quantity INT DEFAULT 0,
+  PRIMARY KEY (ISBN)
 );
 
-create table Borrows (
-  BID int not null unique auto_increment,
-  ISBN int not null,
-  CID varchar(8) not null,
-  SID varchar(7) not null,
-  StartDate date default(current_date()),
-  EndDate date default(current_date() + 3),
-  primary key (BID),
-  foreign key (ISBN) references Books(ISBN),
-  foreign key (CID) references Customers(CID),
-  foreign key (SID) references Staff(SID)
+CREATE TABLE Borrows (
+  BID INT NOT NULL UNIQUE AUTO_INCREMENT,
+  ISBN INT NOT NULL,
+  CID VARCHAR(8) NOT NULL,
+  SID VARCHAR(7) NOT NULL,
+  StartDate DATE DEFAULT(curdate()),
+  EndDate DATE DEFAULT(date_add(curdate(), INTERVAL 3 MONTH)),
+  PRIMARY KEY (BID),
+  FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
+  FOREIGN KEY (CID) REFERENCES Customers(CID),
+  FOREIGN KEY (SID) REFERENCES Staff(SID)
 );
 
-create table BorrowAttempts (
-  ID int not null unique auto_increment,
-  ISBN int,
-  TryDate Date,
-  Quantity int,
-  AlreadyBorrowed int,
-  primary key (ID)
+CREATE TABLE BorrowAttempts (
+  ID INT NOT NULL UNIQUE AUTO_INCREMENT,
+  ISBN INT,
+  TryDate DATE,
+  Quantity INT,
+  AlreadyBorrowed INT,
+  PRIMARY KEY (ID)
 );

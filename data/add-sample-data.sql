@@ -1,4 +1,4 @@
-insert into Books value
+INSERT INTO Books VALUES
   (101,"Mio, min Mio",20,5),
   (102,"Harry Potter",15,3),
   (103,"Sagan om Ringen",25,2),
@@ -20,7 +20,7 @@ insert into Books value
   (119,"Gone with the Wind",23,2),
   (120,"The Lord of the Rings",25,4);
   
-insert into Customers value 
+INSERT INTO Customers VALUES
   ("CUST001","Emma","Andersson",12345,"emma.andersson@gmail.com"),
   ("CUST002","Oscar","Nilsson",32215,"oscar.nilsson@hotmail.com"),
   ("CUST003","Sofia","Karlsson",18273,"sofia.karlsson@yahoo.com"),
@@ -69,7 +69,7 @@ insert into Customers value
   ("CUST046","Max","Eklund",98349,"max.eklund@gmail.com"),
   ("CUST047","Elsa","Sjögren",92393,"elsa.sjogren@hotmail.com");
   
-insert into Staff value
+INSERT INTO Staff VALUES
 ("LIB001","Anna","Andersson",98672,"anna.anderssoon@biblioteket.se"),
 ("LIB002","David","Nilsson",23958,"david.nilsson@biblioteket.se"),
 ("LIB003","Linda","Johansson",94834,"linda.johansson@biblioteket.se"),
