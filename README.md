@@ -83,9 +83,8 @@ call BorrowBook(<ISBN>, <CID>, <SID>);
 #### Info
 Sets the end date to the given date in *Borrows*.
 Throws an error if:
-
-    - The given date is before the current date.
-    - The given **BID** doesn't exist.
+  - The given date is before the current date.
+  - The given **BID** doesn't exist.
 
 #### Usage
 ```
@@ -97,9 +96,8 @@ call SetDate(<BID>, <date>)
 #### Info
 Adds or subtracts the given amount from the current end date in *Borrows*.
 Throws an error if:
-
-    - The given months moves **EndDate** before the current date.
-    - The given **BID** doesn't exist.
+  - The given months moves **EndDate** before the current date.
+  - The given **BID** doesn't exist.
 
 #### Usage
 ```
