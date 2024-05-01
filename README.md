@@ -1,5 +1,5 @@
-# dv1663-project
-final project in DV1663 at BTH
+# DV1663 Project
+Final project in DV1663 at BTH
 
 ## Tables
 Current tables in project.
