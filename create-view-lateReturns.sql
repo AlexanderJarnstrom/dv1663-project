@@ -1,17 +1,16 @@
-CREATE VIEW LateReturns 
-AS SELECT * 
-FROM Borrows
-WHERE Borrows.EndDate < curdate()
---updated counter for late days 
-////////
+DROP VIEW LateReturns;
 
 CREATE VIEW LateReturns 
-AS 
-    SELECT 
-        *,
-        DATEDIFF(curdate(), EndDate) AS DaysLate
-    FROM 
-        Borrows
-    WHERE 
-        EndDate < curdate();
+AS SELECT 
+  Books.Title,
+  Books.ISBN,
+  concat(Customers.FName, ' ', Customers.LName) AS CName,
+  Borrows.EndDate,
+  datediff(curdate(), EndDate) AS DaysLate
+FROM Borrows
+JOIN Customers
+ON Borrows.CID = Customers.CID
+JOIN Books
+ON Borrows.ISBN = Books.ISBN
+WHERE EndDate < curdate();
 
