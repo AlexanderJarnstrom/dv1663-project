@@ -34,6 +34,7 @@ Shows who borrowed which book from who, A borrow is reprecented by the following
   - **SID** (Personell ID, *Foreign key*)
   - **StartDate** (When the book was borrowed)
   - **EndDate** (Latest return date)
+  - **ReturnedDate** (Actual return date)
 
 ###  BorrowAttempts
 Holds information about failed borrow atempts, currently a failed attempt is when all books are loaned already.
@@ -64,14 +65,18 @@ Adds sample data into *Customers*, *Staff* and *Books*. If updating of the table
   - create-procedure-borrowBook: creates procedure **BorrowBook**
   - create-procedure-setDate: creates procedure **SetDate**
   - create-procedure-updateDate: creates procedure **UpdateDate**
+  - create-procedure-returnBook: creates procedure **ReturnBook**
 #### create-view
   - create-view-currentlyBorrowed: creates view *CurrentlyBorrowed*
   - create-view-lateReturns: creates view *LateReturns*
+#### create-trigger
+  - create-trigger-borrowedBook: creates trigger *borrowedBook* on Borrows
+  - create-trigger-returnedBook: creates trigger *returnedBook* on Borrows
 
 ## Procedures
 ### BorrowBook
 #### Info
-Adds a book to *Borrows* if their isn't any more books in stock it'll add an attempt to *BorrowAttempts*. Sets the current date as **StartDate** and current date with an additional three months as **EndDate**.
+Adds a book to *Borrows* if their isn't any more books in stock it'll signal the user and cancle the operation. Sets the current date as **StartDate** and current date with an additional three months as **EndDate**.
 #### Usage
 ```
 call BorrowBook(<ISBN>, <CID>, <SID>);
@@ -105,3 +110,19 @@ call UpdateDate(<BID>, <Months>)
 ```
   - **BID**, Borrow ID
   - **Months**, Amount of months (int)
+
+### ReturnBook
+#### Info
+Sets the **ReturnedDate** as the current date.
+Doesn't throw an error at the moment.
+#### Usage
+```
+call ReturnBook(<BID>);
+```
+  - **BID**, Borrow ID
+
+## Triggers
+  - **borrowedBook** - Updates the quantiy (x - 1) attribute on the book which got borrowed.
+  - **returnedBook** - Updates the quantiy (x + 1) attribute on the book which got borrowed.
+
+
