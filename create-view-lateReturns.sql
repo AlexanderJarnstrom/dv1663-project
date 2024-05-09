@@ -1,4 +1,4 @@
-DROP VIEW LateReturns;
+DROP VIEW IF EXISTS LateReturns;
 
 CREATE VIEW LateReturns 
 AS SELECT 
