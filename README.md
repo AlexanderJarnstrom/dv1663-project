@@ -114,7 +114,8 @@ call UpdateDate(<BID>, <Months>)
 ### ReturnBook
 #### Info
 Sets the **ReturnedDate** as the current date.
-Doesn't throw an error at the moment.
+Throws and error if:
+  - The given **BID** doesn't exist.
 #### Usage
 ```
 call ReturnBook(<BID>);
