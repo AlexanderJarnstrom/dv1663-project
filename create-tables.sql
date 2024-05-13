@@ -44,12 +44,3 @@ CREATE TABLE Borrows (
   FOREIGN KEY (CID) REFERENCES Customers(CID),
   FOREIGN KEY (SID) REFERENCES Staff(SID)
 );
-
-CREATE TABLE BorrowAttempts (
-  ID INT NOT NULL UNIQUE AUTO_INCREMENT,
-  ISBN INT,
-  TryDate DATE,
-  Quantity INT,
-  AlreadyBorrowed INT,
-  PRIMARY KEY (ID)
-);
