@@ -123,6 +123,6 @@ call ReturnBook(<BID>);
 
 ## Triggers
   - **borrowedBook** - Updates the quantiy (x - 1) attribute on the book which got borrowed.
-  - **returnedBook** - Updates the quantiy (x + 1) attribute on the book which got borrowed.
+  - **returnedBook** - Updates the quantiy (x + 1) attribute on the book which got returned.
 
 
