@@ -36,7 +36,7 @@ Shows who borrowed which book from who, A borrow is reprecented by the following
   - **EndDate** (Latest return date)
   - **ReturnedDate** (Actual return date)
 
-###  BorrowAttempts
+###  BorrowAttempts (Deprecated)
 Holds information about failed borrow atempts, currently a failed attempt is when all books are loaned already.
   - **ID** (primary key, auto_increment)
   - **ISBN** (Which book)
