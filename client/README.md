@@ -1,5 +1,4 @@
 # Library client
-
 ## Before using
 ### Dependencies
 #### Toml
@@ -43,3 +42,12 @@ password = "secret"     # user password
 database = "database"   # database name
 ```
 Make sure the content of this file does not upload to git.
+
+## Files
+
+### db-handler
+
+Has all the database related functions. For more information run:
+```
+python db-handler.py
+```
