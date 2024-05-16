@@ -42,3 +42,4 @@ user = "username"       # username
 password = "secret"     # user password
 database = "database"   # database name
 ```
+Make sure the content of this file does not upload to git.
