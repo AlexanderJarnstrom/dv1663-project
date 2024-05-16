@@ -25,6 +25,7 @@ BEGIN
   SET Borrows.ReturnedDate = current_date()
   WHERE Borrows.BID = in_bid;
 
+  COMMIT;
 END $$
 
 DELIMITER ;
