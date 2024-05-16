@@ -6,19 +6,27 @@
 Used for config parseing
 
 **Pip**
-```pip install toml```
+```
+pip install toml
+```
 
 **Pacman**
-```sudo pacman -S python-toml```
+```
+sudo pacman -S python-toml
+```
 
 #### Mysql connector
 Used to connect to the database
 
 **Pip**
-```pip install mysql-connector-python```
+```
+pip install mysql-connector-python
+```
 
 **Pacman**
-```sudo pacman -S python-mysql-connector```
+```
+sudo pacman -S python-mysql-connector
+```
 
 
 
