@@ -38,17 +38,9 @@ CREATE TABLE Borrows (
   SID VARCHAR(7) NOT NULL,
   StartDate DATE DEFAULT(curdate()),
   EndDate DATE DEFAULT(date_add(curdate(), INTERVAL 3 MONTH)),
+  ReturnedDate DATE DEFAULT NULL,
   PRIMARY KEY (BID),
   FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
   FOREIGN KEY (CID) REFERENCES Customers(CID),
   FOREIGN KEY (SID) REFERENCES Staff(SID)
-);
-
-CREATE TABLE BorrowAttempts (
-  ID INT NOT NULL UNIQUE AUTO_INCREMENT,
-  ISBN INT,
-  TryDate DATE,
-  Quantity INT,
-  AlreadyBorrowed INT,
-  PRIMARY KEY (ID)
 );
