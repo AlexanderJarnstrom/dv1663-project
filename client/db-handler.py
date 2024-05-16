@@ -2,41 +2,109 @@ import mysql.connector
 import tomllib
 
 def get_credentials():
-    global host
-    global user
-    global password
-    global database
-    
+    credentials = {}
     with open("credentials.toml", "rb") as f:
         data = tomllib.load(f)
+       
+        credentials["database"] = data["Connection"]["database"]
+        credentials["host"] = data["Connection"]["host"]
+        credentials["user"] = data["Connection"]["user"]
+        credentials["password"] = data["Connection"]["password"]
 
-        host = data["Connection"]["host"]
-        user = data["Connection"]["user"]
-        password = data["Connection"]["password"]
-        database = data["Connection"]["database"]
+    return credentials
+    
+
+def add_borrow(isbn: int, cid: str, sid: str):
+    args = (isbn, cid, sid, 0)
+    cred = get_credentials()
+    print(args)
+    try:
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                result = cursor.callproc("BorrowBook", args)
+                 
+
+    except mysql.connector.Error as e:
+        print(e)
+        raise e
 
 
-def test():
-    print(host)
-    print(user)
-    print(password)
-    print(database)
 
-    mydb = mysql.connector.connect(
-        host = host,
-        user = user,
-        password = password,
-        database = database 
-    )
+def set_date():
+    pass
 
-    mycursor = mydb.cursor()
-    mycursor.execute("SELECT * FROM Books")
 
-    myresult = mycursor.fetchall()
+def update_date():
+    pass
 
-    for x in myresult:
-        print(x)
+
+def return_book():
+    pass
+
+
+def get_borrows():
+    cred = get_credentials()
+    try:
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.execute("SELECT * FROM Borrows")
+                result = cursor.fetchall()
+                for x in result:
+                    print(x)
+
+    except mysql.connector.Error as e:
+        print(e)
+        raise e
+
+
+def get_late_borrows():
+    pass
+
+
+def get_customers():
+    cred = get_credentials()
+    try:
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.execute("SELECT * FROM Customers")
+                result = cursor.fetchall()
+                for x in result:
+                    print(x)
+
+    except mysql.connector.Error as e:
+        print(e)
+        raise e
+
+
+def get_books():
+    cred = get_credentials()
+    try:
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.execute("SELECT * FROM Books")
+                result = cursor.fetchall()
+                for x in result:
+                    print(x)
+
+    except mysql.connector.Error as e:
+        print(e)
+        raise e
+
+
+def get_staff():
+    cred = get_credentials()
+    try:
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.execute("SELECT * FROM Staff")
+                result = cursor.fetchall()
+                for x in result:
+                    print(x)
+
+    except mysql.connector.Error as e:
+        print(e)
+        raise e
+
 
 if __name__ == "__main__":
-    get_credentials()
-    test()
+    add_borrow(101, "CUST001", "LIB005")
