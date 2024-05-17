@@ -1,72 +1,225 @@
+import datetime
 import mysql.connector
 import tomllib
-from datetime import datetime, timedelta
 
 def get_credentials():
+    """
+    Loads credentials from client/credentials.toml
+    :return: a dict with the credentials
+    """
     credentials = {}
-    with open("credentials.toml", "rb") as f:
-        data = tomllib.load(f)
-       
-        credentials["database"] = data["Connection"]["database"]
-        credentials["host"] = data["Connection"]["host"]
-        credentials["user"] = data["Connection"]["user"]
-        credentials["password"] = data["Connection"]["password"]
+    try:
+        with open("credentials.toml", "rb") as f:
+            data = tomllib.load(f)
+            credentials = {
+                "database": data["Connection"]["database"],
+                "host": data["Connection"]["host"],
+                "user": data["Connection"]["user"],
+                "password": data["Connection"]["password"]
+            }
+    except Exception as e:
+        print(f"Error loading credentials: {e}")
+        raise e
 
     return credentials
-    
+
 def add_borrow(isbn: int, cid: str, sid: str):
-    cred = get_credentials()
+    """
+    Adds a book to the 'Borrows'
+    :param isbn: International Standard Book Number
+    :param cid: Customer ID 
+    :param sid: Staff ID
+    """
+    args = (isbn, cid, sid, 0)
     try:
+        cred = get_credentials()
         with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
-                query = "INSERT INTO Borrows (ISBN, CustomerID, StaffID, BorrowDate) VALUES (%s, %s, %s, %s)"
-                borrow_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                cursor.execute(query, (isbn, cid, sid, borrow_date))
-                db.commit()
-                print("Borrow added successfully.")
-
+                cursor.callproc("BorrowBook", args)
     except mysql.connector.Error as e:
-        print("Error adding borrow:", e)
+        print(f"Database error: {e}")
+        raise e
 
-def set_date(borrow_id: int):
+def set_date(bid: int, date: datetime.date):
+    """
+    Sets the wished return date on a borrow.
+    :param bid: Borrow ID 
+    :param date: The date
+    """
+    args = (bid, date)
     try:
-        with mysql.connector.connect(**get_credentials()) as db:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
-                query = "UPDATE Borrows SET ReturnDate = %s WHERE BorrowID = %s"
-                return_date = (datetime.now() + timedelta(days=14)).strftime('%Y-%m-%d %H:%M:%S')
-                cursor.execute(query, (return_date, borrow_id))
-                db.commit()
-                print("Return date set successfully.")
-
+                cursor.callproc("SetDate", args)
     except mysql.connector.Error as e:
-        print("Error setting return date:", e)
+        print(f"Database error: {e}")
+        raise e
 
-def update_date(borrow_id: int, new_return_date: str):
+def update_date(bid: int, months: int):
+    """
+    Updates the wished return date with +/- months.
+    :param bid: Borrow ID
+    :param months: Amount of months
+    """
+    args = (bid, months)
     try:
-        with mysql.connector.connect(**get_credentials()) as db:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
-                query = "UPDATE Borrows SET ReturnDate = %s WHERE BorrowID = %s"
-                cursor.execute(query, (new_return_date, borrow_id))
-                db.commit()
-                print("Return date updated successfully.")
-
+                cursor.callproc("UpdateDate", args)
     except mysql.connector.Error as e:
-        print("Error updating return date:", e)
+        print(f"Database error: {e}")
+        raise e
 
-def return_book(borrow_id: int):
+def return_book(bid: int):
+    """
+    Updates the borrow as returned by setting the return
+    date to today's date.
+    :param bid: Borrow ID
+    """
+    args = (bid,)
     try:
-        with mysql.connector.connect(**get_credentials()) as db:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
-                query = "UPDATE Borrows SET Returned = 1 WHERE BorrowID = %s"
-                cursor.execute(query, (borrow_id,))
-                db.commit()
-                print("Book returned successfully.")
-
+                cursor.callproc("ReturnBook", args)
     except mysql.connector.Error as e:
-        print("Error returning book:", e)
+        print(f"Database error: {e}")
+        raise e
 
-# Add other functions (get_borrows, get_late_borrows, get_customers, get_books, get_staff) here...
+def get_currently_borrowed():
+    """
+    Gets the books that are currently borrowed, how many
+    of each and earliest upcoming return.
+    """
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.execute("SELECT * FROM CurrentlyBorrowed")
+                result = cursor.fetchall()
+                for row in result:
+                    print(row)
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        raise e
+
+def get_late_returns():
+    """
+    Gets all borrows where the end date has passed
+    today's date.
+    """
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.execute("SELECT * FROM LateReturns")
+                result = cursor.fetchall()
+                for row in result:
+                    print(row)
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        raise e
+
+def get_borrows(bid: int = -1):
+    """
+    Gets all borrows, if bid isn't set it'll return
+    all, otherwise it'll return the borrow with the
+    given id.
+    :param bid: Borrow ID
+    """
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                if bid == -1:
+                    cursor.execute("SELECT * FROM Borrows")
+                else:
+                    cursor.execute("SELECT * FROM Borrows WHERE Borrows.BID = %s", (bid,))
+                result = cursor.fetchall()
+                for row in result:
+                    print(row)
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        raise e
+
+def get_customers(cid: str = ""):
+    """
+    Gets all customers, if cid isn't set it'll return
+    all, otherwise it'll return the customer with the
+    given id.
+    :param cid: Customer ID
+    """
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                if cid == "":
+                    cursor.execute("SELECT * FROM Customers")
+                else:
+                    cursor.execute("SELECT * FROM Customers WHERE Customers.CID = %s", (cid,))
+                result = cursor.fetchall()
+                for row in result:
+                    print(row)
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        raise e
+
+def get_books(isbn: int = -1):
+    """
+    Gets all books, if isbn isn't set it'll return
+    all, otherwise it'll return the book with the
+    given id.
+    :param isbn: International Standard Book Number
+    """
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                if isbn == -1:
+                    cursor.execute("SELECT * FROM Books")
+                else:
+                    cursor.execute("SELECT * FROM Books WHERE Books.ISBN = %s", (isbn,))
+                result = cursor.fetchall()
+                for row in result:
+                    print(row)
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        raise e
+
+def get_staff(sid: str = ""):
+    """
+    Gets all Staff, if sid isn't set it'll return
+    all, otherwise it'll return the staff with the
+    given id.
+    :param sid: Staff ID
+    """
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                if sid == "":
+                    cursor.execute("SELECT * FROM Staff")
+                else:
+                    cursor.execute("SELECT * FROM Staff WHERE Staff.SID = %s", (sid,))
+                result = cursor.fetchall()
+                for row in result:
+                    print(row)
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        raise e
 
 if __name__ == "__main__":
-    add_borrow(101, "CUST001", "LIB005")
-
+    print(__doc__)
+    print(get_credentials.__doc__)
+    print(add_borrow.__doc__)
+    print(set_date.__doc__)
+    print(update_date.__doc__)
+    print(return_book.__doc__)
+    print(get_currently_borrowed.__doc__)
+    print(get_late_returns.__doc__)
+    print(get_borrows.__doc__)
+    print(get_customers.__doc__)
+    print(get_books.__doc__)
+    print(get_staff.__doc__)
