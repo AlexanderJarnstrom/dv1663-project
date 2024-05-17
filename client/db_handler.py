@@ -121,12 +121,12 @@ def get_currently_borrowed():
             with db.cursor() as cursor:
                 cursor.execute("SELECT * FROM CurrentlyBorrowed")
                 result = cursor.fetchall()
-                for x in result:
-                    print(x)
+                return result
 
     except mysql.connector.Error as e:
         print(e)
-        raise e
+
+    return None
 
 
 def get_late_returns():
@@ -190,12 +190,12 @@ def get_customers(cid: str = ""):
                     cursor.execute("SELECT * FROM Customers WHERE Customers.CID = %s", [cid])
 
                 result = cursor.fetchall()
-                for x in result:
-                    print(x)
+                return result
 
     except mysql.connector.Error as e:
         print(e)
-        raise e
+
+    return None
 
 
 def get_books(isbn: int = -1):
@@ -240,12 +240,12 @@ def get_staff(sid: str = ""):
                     cursor.execute("SELECT * FROM Staff WHERE Staff.SID = %s", [sid])
 
                 result = cursor.fetchall()
-                for x in result:
-                    print(x)
+                return result
 
     except mysql.connector.Error as e:
         print(e)
-        raise e
+
+    return None
 
 
 if __name__ == "__main__":
