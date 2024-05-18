@@ -1,0 +1,29 @@
+<!DOCTYPE>
+
+<html>
+  <head>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/style.css') }}> 
+  </head>  
+  <body>
+    <header>
+      <h1>Library.{% block title %}{% endblock %}</h1> 
+      <div id="menu">
+        <a href="/books">Books</a>
+        <a href="/customers">Customers</a>
+        <a href="/staff">Staff</a>
+        <a href="/borrows">Borrows</a>
+      </div>
+
+    </header>
+
+    <div id="holder">
+      <div id="handler-div">{% block handler %}{% endblock %}</div>
+      <div id="table-div">{% block table %}{% endblock %}</div>
+    </div>
+
+    <footer>
+      <p>Created by Alexander Järnström and Muaath Awad for DV1663 at Bleking Tekniska Högskola.</p>
+      <a href="https://github.com/AlexanderJarnstrom/dv1663-project.git">Github</a>
+    </footer>
+  </body>
+</html>

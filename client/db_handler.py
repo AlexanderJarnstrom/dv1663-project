@@ -1,3 +1,19 @@
+"""
+Collection of all database related calls.
+
+    - get_credentials
+    - add_borrow
+    - set_date
+    - update_date
+    - return_book
+    - get_currently_borrowed
+    - get_late_returns
+    - get_borrows
+    - get_customers
+    - get_books
+    - get_staff
+"""
+
 import datetime
 import mysql.connector
 import tomllib
@@ -7,7 +23,12 @@ from tabulate import tabulate
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
 def get_credentials():
+    """
+    Loads credentials form client/credentials.toml
+    :return: a dict with the credentials
+    """
     try:
         with open("credentials.toml", "rb") as f:
             data = tomllib.load(f)
@@ -22,22 +43,31 @@ def get_credentials():
         logging.error(f"Error loading credentials: {e}")
         raise e
 
+        
 def add_borrow(isbn: int, cid: str, sid: str):
-   
+    """
+    Adds a book to the 'Borrows
+    :param isbn: International Standard Book Number
+    :param cid: Customer ID 
+    :param sid: Staff ID
+    """
     args = (isbn, cid, sid)
+
     try:
         cred = get_credentials()
         with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
                 cursor.callproc("BorrowBook", args)
+
         logging.info(f"Borrow added: ISBN={isbn}, CID={cid}, SID={sid}")
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
         raise e
 
+        
 def set_date(bid: int, date: datetime.date):
     """
-    Sets the wished return date on a borrow.
+    Sets the the whished return date on a borrow.
     :param bid: Borrow ID 
     :param date: The date
     """
@@ -47,26 +77,38 @@ def set_date(bid: int, date: datetime.date):
         with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
                 cursor.callproc("SetDate", args)
+
         logging.info(f"Date set for BID={bid} to {date}")
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
         raise e
-
+        
+        
 def update_date(bid: int, months: int):
- 
+    """
+    Updates the wished return date with +/- months.
+    :param bid: Borrow ID
+    :param months: Amount of months
+    """
     args = (bid, months)
     try:
         cred = get_credentials()
         with mysql.connector.connect(**cred) as db:
             with db.cursor() as cursor:
                 cursor.callproc("UpdateDate", args)
+
         logging.info(f"Date updated for BID={bid} by {months} months")
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
         raise e
 
+        
 def return_book(bid: int):
-
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
     args = (bid,)
     try:
         cred = get_credentials()
@@ -78,8 +120,8 @@ def return_book(bid: int):
         logging.error(f"Database error: {e}")
         raise e
 
+        
 def fetch_and_print(query: str, params: tuple = ()):
-  
     try:
         cred = get_credentials()
         with mysql.connector.connect(**cred) as db:
@@ -93,18 +135,32 @@ def fetch_and_print(query: str, params: tuple = ()):
         logging.error(f"Database error: {e}")
         raise e
 
+        
 def get_currently_borrowed():
-
+    """
+    Gets the books that are currently borrowed, how many
+    of each and earliest up coming return.
+    """
     query = "SELECT * FROM CurrentlyBorrowed"
     return fetch_and_print(query)
 
-def get_late_returns():
   
+def get_late_returns():
+    """
+    Gets all borrows where the end date has passed
+    todays date.
+    """
     query = "SELECT * FROM LateReturns"
     return fetch_and_print(query)
 
+  
 def get_borrows(bid: int = -1):
- 
+    """
+    Gets all borrows, if bid isn't set it'll return
+    all, otherwise it'll return the borrow with the
+    given id.
+    :param bid: Borrow ID
+    """
     if bid == -1:
         query = "SELECT * FROM Borrows"
         params = ()
@@ -113,8 +169,14 @@ def get_borrows(bid: int = -1):
         params = (bid,)
     return fetch_and_print(query, params)
 
-def get_customers(cid: str = ""):
   
+def get_customers(cid: str = ""):
+    """
+    Gets all customers, if bid isn't set it'll return
+    all, otherwise it'll return the customer with the
+    given id.
+    :param cid: Customer ID
+    """
     if cid == "":
         query = "SELECT * FROM Customers"
         params = ()
@@ -123,8 +185,14 @@ def get_customers(cid: str = ""):
         params = (cid,)
     return fetch_and_print(query, params)
 
-def get_books(isbn: int = -1):
   
+def get_books(isbn: int = -1):
+    """
+    Gets all books, if bid isn't set it'll return
+    all, otherwise it'll return the book with the
+    given id.
+    :param isbn: International standard book number
+    """
     if isbn == -1:
         query = "SELECT * FROM Books"
         params = ()
@@ -133,8 +201,14 @@ def get_books(isbn: int = -1):
         params = (isbn,)
     return fetch_and_print(query, params)
 
-def get_staff(sid: str = ""):
   
+def get_staff(sid: str = ""):
+    """
+    Gets all Staff, if bid isn't set it'll return
+    all, otherwise it'll return the staff with the
+    given id.
+    :param sid: Staff ID
+    """
     if sid == "":
         query = "SELECT * FROM Staff"
         params = ()
@@ -143,6 +217,7 @@ def get_staff(sid: str = ""):
         params = (sid,)
     return fetch_and_print(query, params)
 
+  
 if __name__ == "__main__":
     import argparse
 
@@ -195,3 +270,4 @@ if __name__ == "__main__":
         get_books(args.isbn if args.isbn else -1)
     elif args.operation == "get_staff":
         get_staff(args.sid if args.sid else "")
+

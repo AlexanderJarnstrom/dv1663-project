@@ -1,0 +1,71 @@
+{% extends "index.html" %}
+{% block title %}Customers{% endblock %}
+{% block handler %}
+<div class="handler-cell">
+  <h3>Search</h3>
+  <form>
+    <input type="text" name="search-cid">
+    <input type="button" name="bth-search" value="Search">
+  </form>
+</div>
+<div class="handler-cell">
+  <h3>Add New Customer</h3>
+  <form>
+    <table class="form-table">
+      <tr>
+        <td style="text-align: right;">CID:</td>
+        <td><input type="text" name="txt-cid"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">First Name:</td>
+        <td><input type="text" name="txt-fname"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Last Name:</td>
+        <td><input type="text" name="txt-lname"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Phone Number:</td>
+        <td><input type="text" name="txt-phone-nbr"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Email:</td>
+        <td><input type="text" name="txt-email"></td>
+      </tr>
+    </table>
+  </form>  
+</div>
+<div class="handler-cell">
+  <h3>Remove Customer</h3>
+  <input type="text" name="remove-cid">
+  <input type="button" name="btn-remove" value="Remove">
+  <form>
+  </form>  
+</div>
+{% endblock %}
+
+
+{% block table %}
+<table>
+  <thead>
+    <tr>
+      <th>CID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for attr in content %}
+    <tr>
+      <td>{{ attr[0] }}</td>
+      <td>{{ attr[1] }}</td>
+      <td>{{ attr[2] }}</td>
+      <td>{{ attr[3] }}</td>
+      <td>{{ attr[4] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} 
