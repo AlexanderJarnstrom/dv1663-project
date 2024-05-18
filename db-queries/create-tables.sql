@@ -26,7 +26,6 @@ CREATE TABLE Customers(
 CREATE TABLE Books (
   ISBN INT,
   Title VARCHAR(25) NOT NULL,
-  Price INT NOT NULL,
   Quantity INT DEFAULT 0,
   PRIMARY KEY (ISBN)
 );
@@ -38,6 +37,7 @@ CREATE TABLE Borrows (
   SID INT,
   StartDate DATE DEFAULT(curdate()),
   EndDate DATE DEFAULT(date_add(curdate(), INTERVAL 3 MONTH)),
+  ReturnedDate Date DEFAULT NULL,
   PRIMARY KEY (BID),
   FOREIGN KEY (ISBN) REFERENCES Books(ISBN),
   FOREIGN KEY (CID) REFERENCES Customers(CID),

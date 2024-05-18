@@ -1,8 +1,8 @@
-DROP PROCEDURE IF EXISTS AddCustomer;
+DROP PROCEDURE IF EXISTS AddStaff;
 
 DELIMITER $$
 
-CREATE PROCEDURE AddCustomer (
+CREATE PROCEDURE AddStaff (
   IN in_f_name VARCHAR(15),
   IN in_l_name VARCHAR(15),
   IN in_phone_nbr INT,
@@ -10,10 +10,11 @@ CREATE PROCEDURE AddCustomer (
 )
 BEGIN
 
-  INSERT INTO Customers (FName, LName, PhoneNbr, Email)
+  INSERT INTO Staff (FName, LName, PhoneNbr, Email)
   VALUES (in_f_name, in_l_name, in_phone_nbr, in_email);
 
   COMMIT;
 END $$
+
 
 DELIMITER ;
