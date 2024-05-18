@@ -28,6 +28,10 @@ a{
   font-weight: bold;
 }
 
+.error-txt {
+  color: tomato;
+}
+
 #menu {
   border-top-style: solid;
   padding: 5px;

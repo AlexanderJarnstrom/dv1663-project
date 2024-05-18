@@ -44,7 +44,7 @@ def get_credentials():
         raise e
 
         
-def add_borrow(isbn: int, cid: str, sid: str):
+def add_borrow(isbn: int, cid: int, sid: int):
     """
     Adds a book to the 'Borrows
     :param isbn: International Standard Book Number
@@ -60,12 +60,13 @@ def add_borrow(isbn: int, cid: str, sid: str):
                 cursor.callproc("BorrowBook", args)
 
         logging.info(f"Borrow added: ISBN={isbn}, CID={cid}, SID={sid}")
+        return None
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
-        raise e
+        return e.msg
 
         
-def set_date(bid: int, date: datetime.date):
+def set_date(bid: int, date: str):
     """
     Sets the the whished return date on a borrow.
     :param bid: Borrow ID 
@@ -79,9 +80,10 @@ def set_date(bid: int, date: datetime.date):
                 cursor.callproc("SetDate", args)
 
         logging.info(f"Date set for BID={bid} to {date}")
+        return None
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
-        raise e
+        return e.msg
         
         
 def update_date(bid: int, months: int):
@@ -98,9 +100,10 @@ def update_date(bid: int, months: int):
                 cursor.callproc("UpdateDate", args)
 
         logging.info(f"Date updated for BID={bid} by {months} months")
+        return None
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
-        raise e
+        return e.msg
 
         
 def return_book(bid: int):
@@ -116,11 +119,120 @@ def return_book(bid: int):
             with db.cursor() as cursor:
                 cursor.callproc("ReturnBook", args)
         logging.info(f"Book returned for BID={bid}")
+        return None
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        return e.msg
+
+
+def add_customer(fname: str, lname: str, phone_nbr: int, email: str):
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
+    args = (fname, lname, phone_nbr, email)
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.callproc("AddCustomer", args)
+        logging.info(f"Added customer {fname} {lname} {phone_nbr} {email}")
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
         raise e
 
-        
+
+def add_staff(fname: str, lname: str, phone_nbr: int, email: str):
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
+    args = (fname, lname, phone_nbr, email)
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.callproc("AddStaff", args)
+        logging.info(f"Added staff {fname} {lname} {phone_nbr} {email}")
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        raise e
+
+
+def add_book(isbn: int, title: str, quantity: int):
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
+    args = (isbn, title, quantity)
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.callproc("AddBook", args)
+        logging.info(f"Added book {isbn} {title} {quantity}")
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        raise e
+
+
+def remove_customer(cid: int):
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
+    args = (cid,)
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.callproc("RemoveCustomer", args)
+        logging.info(f"Removed customer CID = {cid}")
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        raise e        
+
+
+def remove_book(isbn: int):
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
+    args = (isbn,)
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.callproc("RemoveBook", args)
+        logging.info(f"Removed book ISBN = {isbn}")
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        raise e        
+
+
+def remove_staff(sid: int):
+    """
+    Updates the borrow as returned by setting the return
+    date to todays date.
+    :param bid: Borrow ID
+    """
+    args = (sid,)
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                cursor.callproc("RemoveStaff", args)
+        logging.info(f"Removed Staff SID = {sid}")
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        raise e        
+
+
 def fetch_and_print(query: str, params: tuple = ()):
     try:
         cred = get_credentials()
@@ -170,52 +282,64 @@ def get_borrows(bid: int = -1):
     return fetch_and_print(query, params)
 
   
-def get_customers(cid: str = ""):
+def get_customers(search: str = ""):
     """
     Gets all customers, if bid isn't set it'll return
     all, otherwise it'll return the customer with the
     given id.
     :param cid: Customer ID
     """
-    if cid == "":
-        query = "SELECT * FROM Customers"
-        params = ()
-    else:
-        query = "SELECT * FROM Customers WHERE Customers.CID = %s"
-        params = (cid,)
-    return fetch_and_print(query, params)
+    query = """SELECT *
+        FROM Customers 
+        WHERE concat(
+            Customers.CID,
+            Customers.Email,
+            Customers.FName,
+            Customers.LName,
+            Customers.PhoneNbr
+        ) LIKE "%"""
+    query += search
+    query += "%\""
+    return fetch_and_print(query)
 
   
-def get_books(isbn: int = -1):
+def get_books(search: str = ""):
     """
     Gets all books, if bid isn't set it'll return
     all, otherwise it'll return the book with the
     given id.
     :param isbn: International standard book number
     """
-    if isbn == -1:
-        query = "SELECT * FROM Books"
-        params = ()
-    else:
-        query = "SELECT * FROM Books WHERE Books.ISBN = %s"
-        params = (isbn,)
-    return fetch_and_print(query, params)
+    query = """SELECT *
+        FROM Books 
+        WHERE concat(
+            Books.ISBN,
+            Books.Title
+        ) LIKE "%"""
+    query += search
+    query += "%\""
+    return fetch_and_print(query)
 
   
-def get_staff(sid: str = ""):
+def get_staff(search: str = ""):
     """
     Gets all Staff, if bid isn't set it'll return
     all, otherwise it'll return the staff with the
     given id.
     :param sid: Staff ID
     """
-    if sid == "":
-        query = "SELECT * FROM Staff"
-        params = ()
-    else:
-        query = "SELECT * FROM Staff WHERE Staff.SID = %s"
-        params = (sid,)
-    return fetch_and_print(query, params)
+    query = """SELECT *
+        FROM Staff 
+        WHERE concat(
+            Staff.SID,
+            Staff.Email,
+            Staff.FName,
+            Staff.LName,
+            Staff.PhoneNbr
+        ) LIKE "%"""
+    query += search
+    query += "%\""
+    return fetch_and_print(query)
 
   
 if __name__ == "__main__":
