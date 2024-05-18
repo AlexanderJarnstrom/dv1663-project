@@ -35,7 +35,7 @@ BEGIN
   SET Borrows.EndDate = new_date
   WHERE Borrows.BID = in_bid;
 
-  COMMIT; 
+  COMMIT;
 END $$
 
 DELIMITER ;
