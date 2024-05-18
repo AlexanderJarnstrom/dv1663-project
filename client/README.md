@@ -43,6 +43,13 @@ database = "database"   # database name
 ```
 Make sure the content of this file does not upload to git.
 
+### How to run
+The only way to run the ui at the moment is opening a terminal, cd to directory and run:
+```
+flask --app client_gui.py run
+```
+if it is for debugging run it whit the ```--debug``` option.
+
 ## Files
 
 ### db-handler
