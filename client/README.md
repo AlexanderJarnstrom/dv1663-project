@@ -3,13 +3,9 @@
 ### Dependencies
 #### Toml
 Used for config parseing
-
-**Pip**
 ```
 pip install toml
 ```
-
-**Pacman**
 ```
 sudo pacman -S python-toml
 ```
