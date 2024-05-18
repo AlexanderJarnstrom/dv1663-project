@@ -62,5 +62,5 @@ if it is for debugging run it whit the ```--debug``` option.
 
 Has all the database related functions. For more information run:
 ```
-python db-handler.py
+python db_handler.py
 ```
