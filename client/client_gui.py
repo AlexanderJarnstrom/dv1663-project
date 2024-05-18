@@ -7,6 +7,10 @@ from table_formatter import table_formatter
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return render_template("home.html")
+
 @app.route("/books")
 def books():
     cont = get_books()
