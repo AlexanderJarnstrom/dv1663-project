@@ -1,0 +1,70 @@
+{% extends "index.html" %}
+{% block title %}.Staff{% endblock %}
+
+{% block handler %}
+<div class="handler-cell">
+  <h3>Search</h3>
+  <form method="post" action="/staff/search">
+    <input type="text" name="txt-search">
+    <input type="submit" name="bth-search" value="Search">
+  </form>
+</div>
+<div class="handler-cell">
+  <h3>Add New Staff</h3>
+  <form method="post" action="/staff/add">
+    <table class="form-table">
+     <tr>
+        <td style="text-align: right;">First Name:</td>
+        <td><input type="text" name="txt-fname"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Last Name:</td>
+        <td><input type="text" name="txt-lname"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Phone Number:</td>
+        <td><input type="text" name="txt-phone-nbr"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Email:</td>
+        <td><input type="text" name="txt-email"></td>
+      </tr>
+    </table>
+    <input type="submit" name="btn-add" value="Add">
+  </form>  
+</div>
+<div class="handler-cell">
+  <h3>Remove Staff</h3>
+  <form method="post" action="/staff/remove">
+    <input type="text" name="txt-sid">
+    <input type="submit" name="btn-remove" value="Remove">
+  </form>  
+</div>
+{% endblock %}
+
+
+
+{% block table %}
+<table>
+  <thead>
+    <tr>
+      <th>SID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for attr in content %}
+    <tr>
+      <td>{{ attr[0] }}</td>
+      <td>{{ attr[1] }}</td>
+      <td>{{ attr[2] }}</td>
+      <td>{{ attr[3] }}</td>
+      <td>{{ attr[4] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} 

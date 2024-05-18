@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+{% block title %}.Books{% endblock %}
+
+{% block handler %}
+<div class="handler-cell">
+  <h3>Search</h3>
+  <form method="post" action="/books/search">
+    <input type="text" name="txt-search">
+    <input type="submit" name="bth-search" value="Search">
+  </form>
+</div>
+<div class="handler-cell">
+  <h3>Add New Books</h3>
+  <form method="post" action="/books/add">
+    <table class="form-table">
+     <tr>
+        <td style="text-align: right;">ISBN:</td>
+        <td><input type="text" name="txt-isbn"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Title:</td>
+        <td><input type="text" name="txt-title"></td>
+      </tr>
+      <tr>
+        <td style="text-align: right;">Quantity:</td>
+        <td><input type="text" name="txt-quantity"></td>
+      </tr>
+    </table>
+    <input type="submit" name="btn-add" value="Add">
+  </form>  
+</div>
+<div class="handler-cell">
+  <h3>Remove Books</h3>
+  <form method="post" action="/books/remove">
+    <input type="text" name="txt-isbn">
+    <input type="submit" name="btn-remove" value="Remove">
+  </form>  
+</div>
+{% endblock %}
+
+{% block table %}
+<table>
+  <thead>
+    <tr>
+      <th>ISBN</th>
+      <th>Title</th>
+      <th>Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for attr in content %}
+    <tr>
+      <td>{{ attr[0] }}</td>
+      <td>{{ attr[1] }}</td>
+      <td>{{ attr[2] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} 

@@ -28,6 +28,10 @@ a{
   font-weight: bold;
 }
 
+.error-txt {
+  color: tomato;
+}
+
 #menu {
   border-top-style: solid;
   padding: 5px;
@@ -43,7 +47,6 @@ a{
 }
 
 #handler-div {
-  padding: 10px;
   width: 100%;
   grid-column-start: 1;
   grid-column-end: 3;
@@ -52,14 +55,10 @@ a{
 }
 
 .handler-cell{
+  padding: 10px;
   width: 100%;
   border-bottom-style: dashed;
   border-bottom-width: 2px;
-}
-
-.form-table > tr {
-  background-color: red;
-  border-style: solid;
 }
 
 #table-div {
@@ -71,15 +70,26 @@ a{
   border-top-style: solid;
 }
 
+#table-div > table > tbody > tr > td {
+  border-right-style: solid;
+  border-width: 2px;
+}
 #table-div > table > thead > tr > th {
   position: sticky;
   top: 0px;
   background-color: white;
+  border-right-style: solid;
+  border-width: 2px;
 }
 
 #table-div > table > tbody > tr:nth-child(even) {
   background-color: #d0d0d0;
 }
+
+#table-div > table > tbody > tr:nth-child(odd) {
+  background-color: white;
+}
+
 
 #table-div > table {
   width: 100%;

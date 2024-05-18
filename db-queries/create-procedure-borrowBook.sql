@@ -5,8 +5,8 @@ DELIMITER $$
 
 CREATE PROCEDURE BorrowBook(
   IN in_isbn INT,
-  IN in_cid VARCHAR(8),
-  IN in_sid VARCHAR(7),
+  IN in_cid INT,
+  IN in_sid INT
 )
 BEGIN
   DECLARE total INT;
@@ -17,7 +17,6 @@ BEGIN
   WHERE Books.ISBN = in_isbn;
   
   IF 0 >= total THEN
-    
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No more available books.';
   END IF;
 
