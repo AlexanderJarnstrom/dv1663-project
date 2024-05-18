@@ -1,16 +1,18 @@
 {% extends "index.html" %}
+
 {% block title %}.Customers{% endblock %}
+
 {% block handler %}
 <div class="handler-cell">
   <h3>Search</h3>
-  <form>
-    <input type="text" name="search-cid">
-    <input type="button" name="bth-search" value="Search">
+  <form method="post" action="/customers/search">
+    <input type="text" name="txt-search-cid">
+    <input type="submit" name="bth-search" value="Search">
   </form>
 </div>
 <div class="handler-cell">
   <h3>Add New Customer</h3>
-  <form>
+  <form method="post" action="/customers/add">
     <table class="form-table">
       <tr>
         <td style="text-align: right;">CID:</td>
@@ -33,6 +35,7 @@
         <td><input type="text" name="txt-email"></td>
       </tr>
     </table>
+    <input type="submit" name="btn-add" value="Add">
   </form>  
 </div>
 <div class="handler-cell">
