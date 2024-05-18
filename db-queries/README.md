@@ -104,3 +104,19 @@ call UpdateDate(<BID>, <Months>)
 ```
   - **BID**, Borrow ID
   - **Months**, Amount of months (int)
+
+### ReturnBook
+#### Info
+Sets the **ReturnedDate** as the current date.
+Throws and error if:
+  - The given **BID** doesn't exist.
+#### Usage
+```
+call ReturnBook(<BID>);
+```
+  - **BID**, Borrow ID
+
+## Triggers
+  - **borrowedBook** - Updates the quantiy (x - 1) attribute on the book which got borrowed.
+  - **returnedBook** - Updates the quantiy (x + 1) attribute on the book which got returned.
+

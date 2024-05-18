@@ -27,8 +27,21 @@ pip install mysql-connector-python
 sudo pacman -S python-mysql-connector
 ```
 
+#### Flask
 
+**Pip**
+```
+pip install Flask
+```
 
+**Pacman**
+```
+sudo pacman -S python-flask
+```
+**tabulate**
+```
+pip install tabulate
+```
 ### Database connection
 A file named *credentials.toml* needs to be created in the directory *client/* with the following content:
 
