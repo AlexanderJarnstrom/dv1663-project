@@ -16,32 +16,29 @@ sudo pacman -S python-toml
 
 #### Mysql connector
 Used to connect to the database
-
-**Pip**
 ```
 pip install mysql-connector-python
 ```
-
-**Pacman**
 ```
 sudo pacman -S python-mysql-connector
 ```
 
 #### Flask
-
-**Pip**
 ```
 pip install Flask
 ```
-
-**Pacman**
 ```
 sudo pacman -S python-flask
 ```
-**tabulate**
+
+#### Tabulate
 ```
 pip install tabulate
 ```
+```
+sudo pacman -S python-tabulate
+```
+
 ### Database connection
 A file named *credentials.toml* needs to be created in the directory *client/* with the following content:
 
