@@ -24,7 +24,7 @@ def get_credentials():
 
 def add_borrow(isbn: int, cid: str, sid: str):
    
-    args = (isbn, cid, sid, 0)
+    args = (isbn, cid, sid)
     try:
         cred = get_credentials()
         with mysql.connector.connect(**cred) as db:

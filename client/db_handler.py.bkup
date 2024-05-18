@@ -42,7 +42,7 @@ def add_borrow(isbn: int, cid: str, sid: str):
     :param cid: Customer ID 
     :param sid: Staff ID
     """
-    args = (isbn, cid, sid, 0)
+    args = (isbn, cid, sid)
     cred = get_credentials()
     print(args)
     try:
@@ -251,6 +251,7 @@ def get_staff(sid: str = ""):
 
 
 if __name__ == "__main__":
+
     print(__doc__)
     print(get_credentials.__doc__)
     print(add_borrow.__doc__)
