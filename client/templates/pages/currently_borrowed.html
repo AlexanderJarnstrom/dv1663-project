@@ -5,7 +5,7 @@
 <div class="handler-cell">
   <h3>Search</h3>
   <form method="post" action="/borrows/search">
-    <input type="text" name="txt-search-cid">
+    <input type="text" name="txt-search">
     <input type="submit" name="bth-search" value="Search">
   </form>
 </div>
@@ -37,10 +37,7 @@
       </tr>
     </table>
     <input type="submit" name="btn-add" value="Borrow">
-  </form>  
-  {% if borrow_error %}
-    <p class="error-txt">{{ borrow_error }}</p>
-  {% endif %}
+  </form>
 </div>
 
 <div class="handler-cell">
@@ -55,7 +52,7 @@
 <div class="handler-cell">
   <h3>Update Return Date</h3>
   <form method="post" action="/borrows/update-date">
-    <input type="number" min="1" max="365" name="number-days">
+    <input type="number" min="-365" max="365" name="number-days">
     <input type="text" name="txt-bid">
     <input type="submit" name="btn-remove" value="Update Date">
   </form>  
@@ -70,6 +67,11 @@
 </div>
 {% endblock %}
 
+{% block error_txt %}
+{% if error_txt %}
+  <span class="error-txt">{{ error_txt }}</span>
+{% endif %}
+{% endblock %}
 
 {% block table %}
 {% if table_type == 0 %} 
@@ -99,9 +101,9 @@
   <thead>
     <tr>
       <th>BID</th>
-      <th>ISBN</th>
-      <th>CID</th>
-      <th>SID</th>
+      <th>Title</th>
+      <th>Customer</th>
+      <th>Librarian</th>
       <th>Start Date</th>
       <th>End Date</th>
       <th>Returned Date</th>
@@ -116,7 +118,13 @@
       <td>{{ attr[3] }}</td>
       <td>{{ attr[4] }}</td>
       <td>{{ attr[5] }}</td>
-      <td>{{ attr[6] }}</td>
+      <td>
+        {% if attr[6] == None %}
+          -
+        {% else %}
+          {{ attr[6] }}
+        {% endif %}
+      </td>
     </tr>
     {% endfor %}
   </tbody>
