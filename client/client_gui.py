@@ -77,6 +77,14 @@ def borrow():
     return render_template("pages/currently_borrowed.html", content=content, table_type=0, borrow_error=resp)
 
 
+@app.route("/borrows/search", methods = ["POST"])
+def borrow_search():
+    search = request.form["txt-search"]
+    content = get_borrows(search)
+    return render_template("pages/currently_borrowed.html", content=content, table_type = 1)
+
+
+
 @app.route("/borrows/return", methods=["POST"])
 def borrow_return():
     bid = int(request.form["txt-bid"])
@@ -86,6 +94,17 @@ def borrow_return():
 
     return render_template("pages/currently_borrowed.html", content=content, table_type=0, borrow_error=resp)
 
+
+@app.route("/borrows/update-date", methods=["POST"])
+def borrow_update_date():
+    
+    months = int(request.form["number-days"])
+    bid = int(request.form["txt-bid"])
+
+    error_txt = update_date(bid, months)
+
+    content = get_borrows(str(bid))
+    return render_template("pages/currently_borrowed.html", content=content, table_type=1, error_txt=error_txt)
 
 
 @app.route("/borrows/set-date", methods=["POST"])
@@ -98,8 +117,6 @@ def borrow_set_date():
     content = get_currently_borrowed()
 
     return render_template("pages/currently_borrowed.html", content=content, table_type=0)
-
-
 
 
 @app.route("/customers")

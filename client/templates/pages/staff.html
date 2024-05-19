@@ -42,7 +42,11 @@
 </div>
 {% endblock %}
 
-
+{% block error_txt %}
+{% if error_txt %}
+  <p class="error-txt">{{ error_txt }}</p>
+{% endif %}
+{% endblock %}
 
 {% block table %}
 <table>

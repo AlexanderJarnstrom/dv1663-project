@@ -266,20 +266,39 @@ def get_late_returns():
     return fetch_and_print(query)
 
   
-def get_borrows(bid: int = -1):
+def get_borrows(search: str = ""):
     """
     Gets all borrows, if bid isn't set it'll return
     all, otherwise it'll return the borrow with the
     given id.
     :param bid: Borrow ID
     """
-    if bid == -1:
-        query = "SELECT * FROM Borrows"
-        params = ()
-    else:
-        query = "SELECT * FROM Borrows WHERE Borrows.BID = %s"
-        params = (bid,)
-    return fetch_and_print(query, params)
+    query = """
+        SELECT 
+            Borrows.BID,
+            Books.Title,
+            concat(Customers.FName, " ", Customers.LName) AS Customer,
+            concat(Staff.FName, " ", Staff.LName) AS Librarian,
+            Borrows.StartDate,
+            Borrows.EndDate,
+            Borrows.ReturnedDate
+        FROM Borrows 
+        JOIN Customers ON Borrows.CID = Customers.CID
+        JOIN Books ON Borrows.ISBN = Books.ISBN
+        JOIN Staff ON Borrows.SID = Staff.SID
+        WHERE concat(
+            Borrows.BID,
+            Customers.FName,
+            Customers.LName,
+            Books.Title,
+            Staff.FName,
+            Staff.LName,
+            Borrows.StartDate,
+            Borrows.EndDate
+        ) LIKE "%"""
+    query += search
+    query += "%\""
+    return fetch_and_print(query)
 
   
 def get_customers(search: str = ""):
