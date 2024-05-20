@@ -19,10 +19,32 @@ import mysql.connector
 import tomllib
 import logging
 from tabulate import tabulate
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+
+def add_sample_data():
+    path = "../db-queries/data/add-sample-data.sql"
+
+    try:
+        cred = get_credentials()
+        with mysql.connector.connect(**cred) as db:
+            with db.cursor() as cursor:
+                with open(path, "r") as f:
+                    data = f.read()
+                    print(data)
+                    cursor.execute(data, multi=True)
+                    logging.info(f"Executed query: {path}")
+
+                db.commit()
+
+    except mysql.connector.Error as e:
+        logging.error(f"Database error: {e}")
+        return e.msg
+    
+    return None
 
 def get_credentials():
     """
@@ -36,7 +58,8 @@ def get_credentials():
                 "database": data["Connection"]["database"],
                 "host": data["Connection"]["host"],
                 "user": data["Connection"]["user"],
-                "password": data["Connection"]["password"]
+                "password": data["Connection"]["password"],
+                "autocommit": "True"
             }
         return credentials
     except Exception as e:
@@ -138,9 +161,10 @@ def add_customer(fname: str, lname: str, phone_nbr: int, email: str):
             with db.cursor() as cursor:
                 cursor.callproc("AddCustomer", args)
         logging.info(f"Added customer {fname} {lname} {phone_nbr} {email}")
+        return None
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
-        raise e
+        return e.msg
 
 
 def add_staff(fname: str, lname: str, phone_nbr: int, email: str):
@@ -156,9 +180,10 @@ def add_staff(fname: str, lname: str, phone_nbr: int, email: str):
             with db.cursor() as cursor:
                 cursor.callproc("AddStaff", args)
         logging.info(f"Added staff {fname} {lname} {phone_nbr} {email}")
+        return None
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
-        raise e
+        return e.msg
 
 
 def add_book(isbn: int, title: str, quantity: int):
@@ -174,63 +199,10 @@ def add_book(isbn: int, title: str, quantity: int):
             with db.cursor() as cursor:
                 cursor.callproc("AddBook", args)
         logging.info(f"Added book {isbn} {title} {quantity}")
+        return None
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
-        raise e
-
-
-def remove_customer(cid: int):
-    """
-    Updates the borrow as returned by setting the return
-    date to todays date.
-    :param bid: Borrow ID
-    """
-    args = (cid,)
-    try:
-        cred = get_credentials()
-        with mysql.connector.connect(**cred) as db:
-            with db.cursor() as cursor:
-                cursor.callproc("RemoveCustomer", args)
-        logging.info(f"Removed customer CID = {cid}")
-    except mysql.connector.Error as e:
-        logging.error(f"Database error: {e}")
-        raise e        
-
-
-def remove_book(isbn: int):
-    """
-    Updates the borrow as returned by setting the return
-    date to todays date.
-    :param bid: Borrow ID
-    """
-    args = (isbn,)
-    try:
-        cred = get_credentials()
-        with mysql.connector.connect(**cred) as db:
-            with db.cursor() as cursor:
-                cursor.callproc("RemoveBook", args)
-        logging.info(f"Removed book ISBN = {isbn}")
-    except mysql.connector.Error as e:
-        logging.error(f"Database error: {e}")
-        raise e        
-
-
-def remove_staff(sid: int):
-    """
-    Updates the borrow as returned by setting the return
-    date to todays date.
-    :param bid: Borrow ID
-    """
-    args = (sid,)
-    try:
-        cred = get_credentials()
-        with mysql.connector.connect(**cred) as db:
-            with db.cursor() as cursor:
-                cursor.callproc("RemoveStaff", args)
-        logging.info(f"Removed Staff SID = {sid}")
-    except mysql.connector.Error as e:
-        logging.error(f"Database error: {e}")
-        raise e        
+        return e.msg
 
 
 def fetch_and_print(query: str, params: tuple = ()):
@@ -240,8 +212,8 @@ def fetch_and_print(query: str, params: tuple = ()):
             with db.cursor() as cursor:
                 cursor.execute(query, params)
                 result = cursor.fetchall()
-                headers = [i[0] for i in cursor.description]
-                print(tabulate(result, headers, tablefmt='psql'))
+                #headers = [i[0] for i in cursor.description]
+                #print(tabulate(result, headers, tablefmt='psql'))
                 return result
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")

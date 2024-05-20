@@ -29,13 +29,12 @@
     <input type="submit" name="btn-add" value="Add">
   </form>  
 </div>
-<div class="handler-cell">
-  <h3>Remove Books</h3>
-  <form method="post" action="/books/remove">
-    <input type="text" name="txt-isbn">
-    <input type="submit" name="btn-remove" value="Remove">
-  </form>  
-</div>
+{% endblock %}
+
+{% block error_txt %}
+{% if error_txt %}
+  <span class="error-txt">{{ error_txt }}</span>
+{% endif %}
 {% endblock %}
 
 {% block table %}
