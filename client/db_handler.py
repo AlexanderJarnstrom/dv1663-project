@@ -240,8 +240,8 @@ def fetch_and_print(query: str, params: tuple = ()):
             with db.cursor() as cursor:
                 cursor.execute(query, params)
                 result = cursor.fetchall()
-                headers = [i[0] for i in cursor.description]
-                print(tabulate(result, headers, tablefmt='psql'))
+                #headers = [i[0] for i in cursor.description]
+                #print(tabulate(result, headers, tablefmt='psql'))
                 return result
     except mysql.connector.Error as e:
         logging.error(f"Database error: {e}")
