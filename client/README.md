@@ -2,7 +2,6 @@
 ## Before using
 ### Dependencies
 #### Toml
-Used for config parseing
 ```
 pip install toml
 ```
@@ -11,7 +10,6 @@ sudo pacman -S python-toml
 ```
 
 #### Mysql connector
-Used to connect to the database
 ```
 pip install mysql-connector-python
 ```
@@ -58,9 +56,24 @@ if it is for debugging run it whit the ```--debug``` option.
 
 ## Files
 
-### db-handler
+### db_handler
 
 Has all the database related functions. For more information run:
 ```
 python db_handler.py
 ```
+
+### client_gui
+
+Handles the gui and the related HTML/CSS files.
+
+## Screenshots
+![Book page](/client/screenshots/books.png?raw=true "Book page")
+
+![Customers page](/client/screenshots/customers.png?raw=true "Customers page")
+
+![Staff page](/client/screenshots/staff.png?raw=true "Staff page")
+
+![Borrows 1 page](/client/screenshots/borrows-1.png?raw=true "Borrows 1 page")
+
+![Borrows 2 page](/client/screenshots/borrows-2.png?raw=true "Borrows 2 page")

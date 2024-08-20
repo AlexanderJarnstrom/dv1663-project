@@ -24,10 +24,10 @@ def book_add():
     isbn = int(request.form["txt-isbn"])
     title = request.form["txt-title"]
     quantity = int(request.form["txt-quantity"])
-    add_book(isbn, title, quantity)
+    error_txt = add_book(isbn, title, quantity)
 
     content = get_books()
-    return render_template("pages/books.html", content=content)
+    return render_template("pages/books.html", content=content, error_txt=error_txt)
 
 
 # Route för att söka efter böcker, endast POST
@@ -38,18 +38,7 @@ def book_search():
     return render_template("pages/books.html", content=content)
 
 
-# Route för att ta bort en bok, endast POST
-@app.route("/books/remove", methods=["POST"])
-def book_remove():
-    isbn = request.form["txt-isbn"]
-    remove_book(int(isbn))
-
-    content = get_books()
-    return render_template("pages/books.html", content=content)
-
-
-# Route för att visa nuvarande lån, hanterar både GET och POST
-@app.route("/borrows", methods=["GET", "POST"])
+@app.route("/borrows", methods = ["GET", "POST"])
 def currently_borrowed():
     table_type = 0
 
@@ -75,10 +64,10 @@ def borrow():
     isbn = int(request.form["txt-isbn"])
     sid = int(request.form["txt-sid"])
 
-    resp = add_borrow(isbn, cid, sid)
+    error_txt = add_borrow(isbn, cid, sid)
     content = get_currently_borrowed()
 
-    return render_template("pages/currently_borrowed.html", content=content, table_type=0, borrow_error=resp)
+    return render_template("pages/currently_borrowed.html", content=content, table_type=0, error_txt=error_txt)
 
 
 # Route för att söka bland lån, endast POST
@@ -94,10 +83,10 @@ def borrow_search():
 def borrow_return():
     bid = int(request.form["txt-bid"])
 
-    resp = return_book(bid)
+    error_txt = return_book(bid)
     content = get_currently_borrowed()
 
-    return render_template("pages/currently_borrowed.html", content=content, table_type=0, borrow_error=resp)
+    return render_template("pages/currently_borrowed.html", content=content, table_type=0, error_txt=error_txt)
 
 
 # Route för att uppdatera lånedatum, endast POST
@@ -118,11 +107,10 @@ def borrow_set_date():
     date = request.form["date-new-date"]
     bid = int(request.form["txt-bid"])
 
-    resp = set_date(bid, date)
-    print(resp)
+    error_txt = set_date(bid, date)
     content = get_currently_borrowed()
 
-    return render_template("pages/currently_borrowed.html", content=content, table_type=0)
+    return render_template("pages/currently_borrowed.html", content=content, table_type=1, error_txt=error_txt)
 
 
 # Route för att visa alla kunder
@@ -139,10 +127,11 @@ def customer_add():
     phone_nbr = int(request.form["txt-phone-nbr"])
     email = request.form["txt-email"]
 
-    add_customer(fname, lname, phone_nbr, email)
+    error_txt = add_customer(fname, lname, phone_nbr, email)
 
     content = get_customers()
-    return render_template("pages/customers.html", content=content)
+
+    return render_template("pages/customers.html", content=content, error_txt=error_txt)
 
 
 # Route för att söka efter kunder, endast POST
@@ -153,17 +142,6 @@ def customer_search():
     return render_template("pages/customers.html", content=content)
 
 
-# Route för att ta bort en kund, endast POST
-@app.route("/customers/remove", methods=["POST"])
-def customer_remove():
-    cid = request.form["txt-cid"]
-    remove_customer(int(cid))
-
-    content = get_customers()
-    return render_template("pages/customers.html", content=content)
-
-
-# Route för att visa all personal
 @app.route("/staff")
 def staff():
     content = get_staff()
@@ -177,10 +155,10 @@ def staff_add():
     lname = request.form["txt-lname"]
     phone_nbr = int(request.form["txt-phone-nbr"])
     email = request.form["txt-email"]
-    add_staff(fname, lname, phone_nbr, email)
+    error_txt = add_staff(fname, lname, phone_nbr, email)
 
     content = get_staff()
-    return render_template("pages/staff.html", content=content)
+    return render_template("pages/staff.html", content=content, error_txt=error_txt)
 
 
 # Route för att söka efter personal, endast POST
@@ -190,12 +168,3 @@ def staff_search():
     content = get_staff(search)
     return render_template("pages/staff.html", content=content)
 
-
-# Route för att ta bort personal, endast POST
-@app.route("/staff/remove", methods=["POST"])
-def staff_remove():
-    sid = request.form["txt-sid"]
-    remove_staff(int(sid))
-
-    content = get_staff()
-    return render_template("pages/staff.html", content=content)
