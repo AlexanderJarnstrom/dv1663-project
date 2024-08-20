@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS AddBook;
 
 DELIMITER $$
 
-CREATE PROCEDURE AddCook (
+CREATE PROCEDURE AddBook (
   IN in_isbn INT,
   IN in_title VARCHAR(25),
   IN in_quantity INT

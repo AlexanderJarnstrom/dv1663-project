@@ -5,20 +5,22 @@ from db_handler import *
 
 app = Flask(__name__)
 
+# Route för att visa hemsidan
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
+# Route för att visa alla böcker
 @app.route("/books")
 def books():
     content = get_books()
     return render_template("pages/books.html", content=content)
 
 
-@app.route("/books/add", methods = ["POST"])
+# Route för att lägga till en ny bok, endast POST
+@app.route("/books/add", methods=["POST"])
 def book_add():
-
     isbn = int(request.form["txt-isbn"])
     title = request.form["txt-title"]
     quantity = int(request.form["txt-quantity"])
@@ -28,7 +30,8 @@ def book_add():
     return render_template("pages/books.html", content=content, error_txt=error_txt)
 
 
-@app.route("/books/search", methods = ["POST"])
+# Route för att söka efter böcker, endast POST
+@app.route("/books/search", methods=["POST"])
 def book_search():
     search = request.form["txt-search"]
     content = get_books(search)
@@ -48,14 +51,13 @@ def currently_borrowed():
             content = get_late_returns()
         else:
             content = get_currently_borrowed()
-
     else:
         content = get_currently_borrowed()
 
     return render_template("pages/currently_borrowed.html", content=content, table_type=table_type)
 
 
-
+# Route för att låna en bok, endast POST
 @app.route("/borrows/borrow", methods=["POST"])
 def borrow():
     cid = int(request.form["txt-cid"])
@@ -68,13 +70,15 @@ def borrow():
     return render_template("pages/currently_borrowed.html", content=content, table_type=0, error_txt=error_txt)
 
 
-@app.route("/borrows/search", methods = ["POST"])
+# Route för att söka bland lån, endast POST
+@app.route("/borrows/search", methods=["POST"])
 def borrow_search():
     search = request.form["txt-search"]
     content = get_borrows(search)
-    return render_template("pages/currently_borrowed.html", content=content, table_type = 1)
+    return render_template("pages/currently_borrowed.html", content=content, table_type=1)
 
 
+# Route för att returnera en bok, endast POST
 @app.route("/borrows/return", methods=["POST"])
 def borrow_return():
     bid = int(request.form["txt-bid"])
@@ -85,9 +89,9 @@ def borrow_return():
     return render_template("pages/currently_borrowed.html", content=content, table_type=0, error_txt=error_txt)
 
 
+# Route för att uppdatera lånedatum, endast POST
 @app.route("/borrows/update-date", methods=["POST"])
 def borrow_update_date():
-    
     months = int(request.form["number-days"])
     bid = int(request.form["txt-bid"])
 
@@ -97,6 +101,7 @@ def borrow_update_date():
     return render_template("pages/currently_borrowed.html", content=content, table_type=1, error_txt=error_txt)
 
 
+# Route för att sätta ett specifikt datum för ett lån, endast POST
 @app.route("/borrows/set-date", methods=["POST"])
 def borrow_set_date():
     date = request.form["date-new-date"]
@@ -108,13 +113,14 @@ def borrow_set_date():
     return render_template("pages/currently_borrowed.html", content=content, table_type=1, error_txt=error_txt)
 
 
+# Route för att visa alla kunder
 @app.route("/customers")
 def customers():
     content = get_customers()
     return render_template("pages/customers.html", content=content)
 
-
-@app.route("/customers/add", methods = ["POST"])
+# Route för att lägga till en kund, endast POST
+@app.route("/customers/add", methods=["POST"])
 def customer_add():
     fname = request.form["txt-fname"]
     lname = request.form["txt-lname"]
@@ -128,7 +134,8 @@ def customer_add():
     return render_template("pages/customers.html", content=content, error_txt=error_txt)
 
 
-@app.route("/customers/search", methods = ["POST"])
+# Route för att söka efter kunder, endast POST
+@app.route("/customers/search", methods=["POST"])
 def customer_search():
     search = request.form["txt-search"]
     content = get_customers(search)
@@ -141,9 +148,9 @@ def staff():
     return render_template("pages/staff.html", content=content)
 
 
-@app.route("/staff/add", methods = ["POST"])
+# Route för att lägga till personal, endast POST
+@app.route("/staff/add", methods=["POST"])
 def staff_add():
-
     fname = request.form["txt-fname"]
     lname = request.form["txt-lname"]
     phone_nbr = int(request.form["txt-phone-nbr"])
@@ -154,8 +161,10 @@ def staff_add():
     return render_template("pages/staff.html", content=content, error_txt=error_txt)
 
 
-@app.route("/staff/search", methods = ["POST"])
+# Route för att söka efter personal, endast POST
+@app.route("/staff/search", methods=["POST"])
 def staff_search():
     search = request.form["txt-search"]
     content = get_staff(search)
     return render_template("pages/staff.html", content=content)
+

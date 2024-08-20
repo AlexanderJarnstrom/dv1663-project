@@ -25,13 +25,14 @@ pip install Flask
 sudo pacman -S python-flask
 ```
 
-**tabulate**
+#### Tabulate
 ```
 pip install tabulate
 ```
 ```
 sudo pacman -S python-tabulate
 ```
+
 ### Database connection
 A file named *credentials.toml* needs to be created in the directory *client/* with the following content:
 

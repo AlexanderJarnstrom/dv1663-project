@@ -34,14 +34,6 @@ Shows who borrowed which book from who, A borrow is reprecented by the following
   - **StartDate** (When the book was borrowed)
   - **EndDate** (Latest return date)
 
-###  BorrowAttempts
-Holds information about failed borrow atempts, currently a failed attempt is when all books are loaned already.
-  - **ID** (primary key, auto_increment)
-  - **ISBN** (Which book)
-  - **TryDate** (Date when atempt occured)
-  - **Quantity** (The book count at that day)
-  - **AlreadyBorrowed** (The amount of currently borrowed books)
-
 ## Views
 ### CurrentlyBorrowed
 Shows how many of the individual books are currently borrowed and when the earliest return date is set.
