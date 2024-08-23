@@ -1,5 +1,26 @@
 # Library client
 ## Before using
+### Windows
+1. Install virtualenv:
+```
+pip install virtualenv
+```
+2. Move to client directory and run:
+```
+virtualenv venv
+```
+3. Activate the virtual environment:
+```
+venv\Scripts\activate
+```
+If an error message appear saying "cannot be loaded because running scripts is disabled on this system.", open a new terminal with administrator access and run:
+```
+Set-ExecutionPolicy RemoteSigned
+```
+run step 3 again.
+
+4. Now install dependencies.
+
 ### Dependencies
 #### Toml
 ```
