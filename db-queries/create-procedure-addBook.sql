@@ -8,14 +8,14 @@ CREATE PROCEDURE AddBook (
   IN in_quantity INT
 )
 BEGIN
-  DECLARE exists INT;
+  DECLARE taken INT;
 
   SELECT Books.ISBN
-  INTO exists
+  INTO taken
   FROM Books
   WHERE Books.ISBN = in_isbn;
 
-  IF exists != NULL THEN
+  IF taken != NULL THEN
     SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = "Book already exist.";
   END IF;
 
