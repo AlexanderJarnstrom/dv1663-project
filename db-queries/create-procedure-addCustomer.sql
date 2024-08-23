@@ -9,7 +9,6 @@ CREATE PROCEDURE AddCustomer (
   IN in_email VARCHAR(50)
 )
 BEGIN
-
   INSERT INTO Customers (FName, LName, PhoneNbr, Email)
   VALUES (in_f_name, in_l_name, in_phone_nbr, in_email);
 
