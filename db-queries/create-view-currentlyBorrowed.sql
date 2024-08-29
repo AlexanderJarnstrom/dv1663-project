@@ -10,3 +10,4 @@ FROM Borrows
 JOIN Books
 ON Borrows.ISBN = Books.ISBN
 GROUP BY Borrows.ISBN;
+
